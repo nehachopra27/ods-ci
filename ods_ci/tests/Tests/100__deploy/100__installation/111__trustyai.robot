@@ -13,8 +13,14 @@ ${TRUSTYAI_NS}=    ${APPLICATIONS_NAMESPACE}
 Verify TrustyAI Operator Installation
     [Documentation]    Verifies that the TrustyAI operator has been
     ...    deployed in the ${APPLICATIONS_NAMESPACE} namespace in ODS
+<<<<<<< Updated upstream
     [Tags]    ODS-2481    robot:recursive-continue-on-failure
     Wait Until Keyword Succeeds  1 min  10 sec  Verify TrustyAI Operator Deployment
+=======
+    [Tags]    Smoke
+    ...       Tier1    ODS-2481
+    Run Keyword And Continue On Failure  Wait Until Keyword Succeeds  1 min  10 sec   Verify trustyai-service-operator-controller-manager Deployment
+>>>>>>> Stashed changes
     Wait Until Keyword Succeeds    10 times  5s    Verify TrustyAI ReplicaSets Info
     Wait Until Keyword Succeeds    10 times  5s    Verify TrustyAI Container Names
 
