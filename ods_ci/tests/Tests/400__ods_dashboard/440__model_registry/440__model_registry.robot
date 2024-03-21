@@ -27,6 +27,9 @@ Verify Model Registry Integration With Jupyter Notebook
     ...                 prj_title=${PRJ_TITLE}    image_name=Minimal Python  deployment_size=Small
     ...                 data_connection=model-serving-connection   storage=Persistent   pv_existent=${NONE}
     ...                 pv_name=${NONE}  pv_description=${NONE}  pv_size=${NONE}
+    Create S3 Data Connection    project_title=${PRJ_TITLE}    dc_name=model-serving-connection
+    ...            aws_access_key=${S3.AWS_ACCESS_KEY_ID}    aws_secret_access=${S3.AWS_SECRET_ACCESS_KEY}
+    ...            aws_bucket_name=${aws_bucket}
     Run Keyword And Continue On Failure
     ...    Wait Until Workbench Is Started     workbench_title=registry-wb
 
@@ -35,16 +38,13 @@ Verify Model Registry Integration With Jupyter Notebook
 Prepare Model Registry Test Setup
     [Documentation]    Suite setup steps for testing Model Registry.
     Set Library Search Order    SeleniumLibrary
-    Skip If Component Is Not Enabled    modelregistry
+    #Skip If Component Is Not Enabled    modelregistry
     RHOSi Setup
     Launch Dashboard    ${TEST_USER.USERNAME}    ${TEST_USER.PASSWORD}    ${TEST_USER.AUTH_TYPE}
     ...    ${ODH_DASHBOARD_URL}    ${BROWSER.NAME}    ${BROWSER.OPTIONS}
     Open Data Science Projects Home Page
     Create Data Science Project    title=${PRJ_TITLE}    description=${PRJ_DESCRIPTION}
     Apply Db Config Samples    namespace=${PRJ_TITLE}
-    Create S3 Data Connection    project_title=${PRJ_TITLE}    dc_name=model-serving-connection
-    ...            aws_access_key=${S3.AWS_ACCESS_KEY_ID}    aws_secret_access=${S3.AWS_SECRET_ACCESS_KEY}
-    ...            aws_bucket_name=${aws_bucket}
     Fetch CA Certificate If RHODS Is Self-Managed
 
 Apply Db Config Samples
@@ -61,8 +61,8 @@ Apply Db Config Samples
 
 Teardown Model Registry Test Setup
     [Documentation]  Teardown Model Registry Suite
-    JupyterLibrary.Close All Browsers
-    ${return_code} =	  Run And Return Rc  rm -rf ${MODEL_REGISTRY_DIR}
-    Should Be Equal As Integers	  ${return_code}	 0
-    Delete Data Science Project   project_title=${PRJ_TITLE}
+    #JupyterLibrary.Close All Browsers
+    #${return_code} =	  Run And Return Rc  rm -rf ${MODEL_REGISTRY_DIR}
+    #Should Be Equal As Integers	  ${return_code}	 0
+    #Delete Data Science Project   project_title=${PRJ_TITLE}
 
