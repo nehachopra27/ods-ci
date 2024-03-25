@@ -17,21 +17,26 @@ ${MODEL_REGISTRY_DIR}               model_registry
 ${PRJ_TITLE}                        model-registry-project
 ${PRJ_DESCRIPTION}                  model resgistry project
 ${aws_bucket}=                      ${S3.BUCKET_2.NAME}
+${WORKBENCH_TITLE}=                 registry-wb
 
 
 *** Test Cases ***
 Verify Model Registry Integration With Jupyter Notebook
     [Documentation]    Verifies the Integartion of Model Registry operator with Jupyter Notebook
     [Tags]    OpenDataHub    RunThisTest    robot:recursive-continue-on-failure
-    Create Workbench    workbench_title=registry-wb    workbench_description=Registry test
+    Create Workbench    workbench_title=${WORKBENCH_TITLE}    workbench_description=Registry test
     ...                 prj_title=${PRJ_TITLE}    image_name=Minimal Python  deployment_size=Small
-    ...                 data_connection=model-serving-connection   storage=Persistent   pv_existent=${NONE}
+    ...                 storage=Persistent   pv_existent=${NONE}
     ...                 pv_name=${NONE}  pv_description=${NONE}  pv_size=${NONE}
+    Workbench Should Be Listed      workbench_title=registry-wb
+    Open Data Science Project Details Page       project_title=${PRJ_TITLE}
     Create S3 Data Connection    project_title=${PRJ_TITLE}    dc_name=model-serving-connection
     ...            aws_access_key=${S3.AWS_ACCESS_KEY_ID}    aws_secret_access=${S3.AWS_SECRET_ACCESS_KEY}
     ...            aws_bucket_name=${aws_bucket}
-    Run Keyword And Continue On Failure
-    ...    Wait Until Workbench Is Started     workbench_title=registry-wb
+    Data Connection Should Be Listed    name=${DC_S3_NAME}    type=${DC_S3_TYPE}    connected_workbench=${NONE}
+    Wait Until Workbench Is Started     workbench_title=registry-wb
+    Upload Files In The Workbench    workbench_title=${WORKBENCH_TITLE}    workbench_namespace=${HTTP_MODEL_NS}
+    ...    filepaths=${FILES_TO_UPLOAD}
 
 
 *** Keywords ***
@@ -65,4 +70,6 @@ Teardown Model Registry Test Setup
     #${return_code} =	  Run And Return Rc  rm -rf ${MODEL_REGISTRY_DIR}
     #Should Be Equal As Integers	  ${return_code}	 0
     #Delete Data Science Project   project_title=${PRJ_TITLE}
+
+
 
