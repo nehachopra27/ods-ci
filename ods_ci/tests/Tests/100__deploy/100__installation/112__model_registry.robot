@@ -51,10 +51,10 @@ Verify Model Registry Container Names
 Registry Suite Setup
     [Documentation]  Model Registry suite setup
     ${REGISTRY} =    Is Component Enabled    modelregistry    ${DSC_NAME}
-    IF    "${REGISTRY}" == "false"    Enable Component    modelregistry
+    IF    "$REGISTRY" == "false"    Enable Component    modelregistry
     Set Suite Variable     ${REGISTRY}
 
 Teardown
     [Documentation]    Disable Registry if Enabled
     SeleniumLibrary.Close Browser
-    IF    "${REGISTRY}" == "false"    Disable Component     modelregistry
+    IF    "$REGISTRY" == "false"    Disable Component     modelregistry
